@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Akinbinu Akintayo — AI Visual Director</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:'Inter',ui-sans-serif,system-ui,sans-serif;background:#fff;color:#111315;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+img{display:block;max-width:100%}
+:root{--ink:#111315;--ink-2:#17191c;--muted:#4c5661;--subtle:#6d7682;--line:rgba(17,19,21,.09);--nav-h:64px;--pad:clamp(20px,5vw,80px);--radius:16px;--radius-lg:24px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;padding:0 clamp(20px,4vw,60px);background:rgba(255,255,255,.72);backdrop-filter:blur(18px) saturate(160%);-webkit-backdrop-filter:blur(18px) saturate(160%);border-bottom:1px solid var(--line)}
+.nav-logo{font-size:12px;font-weight:700;letter-spacing:3.8px;text-transform:uppercase;color:var(--ink)}
+.nav-links{display:flex;gap:clamp(20px,3vw,40px);list-style:none}
+.nav-links a{font-size:11px;font-weight:600;letter-spacing:1.8px;text-transform:uppercase;color:var(--subtle);transition:color .2s}
+.nav-links a:hover{color:var(--ink)}
+.nav-burger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none}
+.nav-burger span{display:block;width:22px;height:1.5px;background:var(--ink);transition:.3s}
+.nav-burger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.nav-burger.open span:nth-child(2){opacity:0}
+.nav-burger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+.nav-mobile{display:none;position:fixed;top:var(--nav-h);left:0;right:0;z-index:99;background:rgba(255,255,255,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--line);padding:16px clamp(20px,6vw,60px) 24px;flex-direction:column}
+.nav-mobile.open{display:flex}
+.nav-mobile a{font-size:13px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--subtle);padding:14px 0;border-bottom:1px solid var(--line)}
+.nav-mobile a:last-child{border-bottom:none}
+.label{font-size:10px;font-weight:700;letter-spacing:2.8px;text-transform:uppercase;color:var(--subtle);margin-bottom:16px}
+.hero{position:relative;width:100%;height:100svh;min-height:560px;overflow:hidden}
+.hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(10,11,13,.25),rgba(10,11,13,.10) 30%,rgba(10,11,13,.50) 75%,rgba(10,11,13,.85))}
+.hero-content{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 clamp(20px,6vw,100px)}
+.hero-name{font-size:clamp(11px,1.2vw,14px);font-weight:700;letter-spacing:5px;text-transform:uppercase;color:rgba(255,255,255,.95);margin-bottom:14px}
+.hero-role{font-size:clamp(14px,1.6vw,19px);color:rgba(255,255,255,.78)}
+.hero-bottom{position:absolute;bottom:clamp(28px,5vh,56px);left:clamp(24px,5vw,80px);right:clamp(24px,5vw,80px);display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.hero-desc{font-size:clamp(13px,1.3vw,16px);line-height:1.55;color:rgba(255,255,255,.82);max-width:440px}
+.hero-cta{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+.hero-cta a{font-size:10px;font-weight:600;letter-spacing:2.4px;text-transform:uppercase;color:rgba(255,255,255,.88)}
+.hero-cta a:hover{color:#fff}
+.section{padding:clamp(72px,10vh,140px) var(--pad)}
+.section--alt{background:#f8f8f6}
+.section-inner{max-width:1200px;margin:0 auto}
+.s-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,6vw,100px);margin-top:clamp(32px,4vw,56px)}
+.h-title{font-size:clamp(36px,5vw,56px);font-weight:600;letter-spacing:-1.8px;line-height:.96;color:var(--ink)}
+.s-list{display:flex;flex-direction:column}
+.s-list-item{font-size:clamp(16px,2vw,24px);font-weight:500;color:var(--ink-2);padding:clamp(10px,1.4vw,18px) 0;border-bottom:1px solid var(--line)}
+.s-list-item:first-child{border-top:1px solid var(--line)}
+.about-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:clamp(32px,5vw,80px);align-items:center;margin-top:clamp(32px,4vw,56px)}
+.about-text{font-size:clamp(14px,1.4vw,17px);line-height:1.65;color:var(--muted)}
+.about-text p+p{margin-top:20px}
+.about-img{border-radius:var(--radius-lg);overflow:hidden;aspect-ratio:3/4}
+.about-img img{width:100%;height:100%;object-fit:cover}
+.how-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:clamp(32px,5vw,80px);margin-top:clamp(32px,4vw,56px)}
+.how-img{border-radius:var(--radius-lg);overflow:hidden;aspect-ratio:4/5}
+.how-img img{width:100%;height:100%;object-fit:cover}
+.how-content{display:flex;flex-direction:column;justify-content:center}
+.how-text{font-size:clamp(13px,1.3vw,15px);line-height:1.6;color:var(--muted);margin-bottom:clamp(28px,3vw,44px)}
+.how-steps{display:flex;flex-direction:column}
+.how-step{display:flex;align-items:baseline;gap:18px;padding:clamp(10px,1.4vw,16px) 0;border-bottom:1px solid var(--line)}
+.how-step:first-child{border-top:1px solid var(--line)}
+.how-step-num{font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--subtle);min-width:24px}
+.how-step-text{font-size:clamp(15px,1.6vw,20px);font-weight:500;color:var(--ink-2)}
+.fmt-layout{display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:auto auto;gap:clamp(12px,1.5vw,20px);margin-top:clamp(32px,4vw,56px)}
+.fmt-text{grid-column:1;grid-row:1/3;display:flex;flex-direction:column;justify-content:space-between;padding-right:clamp(16px,2vw,40px)}
+.fmt-items{display:flex;flex-direction:column;margin-bottom:clamp(20px,2.5vw,32px)}
+.fmt-item{font-size:clamp(16px,1.8vw,22px);font-weight:500;color:var(--ink-2);padding:clamp(9px,1.2vw,14px) 0;border-bottom:1px solid var(--line)}
+.fmt-item:first-child{border-top:1px solid var(--line)}
+.fmt-desc{font-size:clamp(13px,1.2vw,15px);line-height:1.6;color:var(--muted)}
+.fmt-tall{grid-column:2;grid-row:1/3;border-radius:var(--radius);overflow:hidden}
+.fmt-tall img{width:100%;height:100%;object-fit:cover}
+.fmt-sq{grid-column:3;border-radius:var(--radius);overflow:hidden;aspect-ratio:4/3}
+.fmt-sq img{width:100%;height:100%;object-fit:cover}
+.works-intro{text-align:center}
+.works-intro-title{font-size:clamp(40px,6vw,72px);font-weight:500;letter-spacing:-2px;line-height:1;color:var(--ink);margin-bottom:clamp(20px,2.5vw,32px)}
+.works-tags{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
+.works-tag{font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--subtle);border:1px solid var(--line);border-radius:100px;padding:8px 18px}
+.proj-hero{position:relative;width:100%;aspect-ratio:16/9;min-height:340px;overflow:hidden}
+.proj-hero img{width:100%;height:100%;object-fit:cover}
+.proj-hero-ov{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 35%,rgba(10,11,13,.78))}
+.proj-hero-meta{position:absolute;bottom:clamp(22px,4vh,52px);left:clamp(22px,4vw,64px);right:clamp(22px,4vw,64px)}
+.proj-hero-cat{font-size:10px;font-weight:700;letter-spacing:2.8px;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:8px}
+.proj-hero-name{font-size:clamp(20px,3vw,34px);font-weight:600;color:#fff;letter-spacing:-.5px;margin-bottom:6px}
+.proj-hero-sub{font-size:clamp(10px,1vw,12px);font-weight:500;letter-spacing:1.8px;text-transform:uppercase;color:rgba(255,255,255,.62)}
+.proj-detail{display:grid;grid-template-columns:1fr 2fr;gap:clamp(32px,5vw,80px);align-items:start;margin-top:clamp(32px,4vw,56px)}
+.proj-meta{position:sticky;top:calc(var(--nav-h) + 24px)}
+.proj-title{font-size:clamp(24px,3vw,38px);font-weight:600;letter-spacing:-1.2px;line-height:.96;color:var(--ink);margin-bottom:clamp(16px,2vw,24px)}
+.proj-body{font-size:clamp(13px,1.3vw,15px);line-height:1.65;color:var(--muted);margin-bottom:clamp(24px,3vw,40px)}
+.proj-specs{display:flex;flex-direction:column;gap:18px}
+.proj-spec-k{font-size:10px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:var(--subtle);margin-bottom:4px}
+.proj-spec-v{font-size:clamp(12px,1.2vw,14px);font-weight:500;line-height:1.5;color:var(--ink-2)}
+.proj-imgs{display:flex;flex-direction:column;gap:clamp(12px,1.5vw,20px)}
+.proj-img{border-radius:var(--radius);overflow:hidden}
+.proj-img img{width:100%;aspect-ratio:16/9;object-fit:cover}
+.proj-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(8px,1vw,14px);margin-top:clamp(32px,4vw,56px)}
+.proj-strip-item{border-radius:10px;overflow:hidden;aspect-ratio:3/4}
+.proj-strip-item img{width:100%;height:100%;object-fit:cover}
+.proj-footer{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,4vw,60px);margin-top:clamp(28px,3.5vw,48px);align-items:start}
+.proj-footer-text{font-size:clamp(13px,1.3vw,15px);line-height:1.65;color:var(--muted)}
+.proj-split{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,5vw,80px);align-items:center;margin-top:clamp(32px,4vw,56px)}
+.proj-split-img{border-radius:var(--radius-lg);overflow:hidden;aspect-ratio:3/4}
+.proj-split-img img{width:100%;height:100%;object-fit:cover}
+.proj-split-c{display:flex;flex-direction:column;justify-content:center}
+.proj-split-title{font-size:clamp(28px,4vw,52px);font-weight:600;letter-spacing:-2px;line-height:.96;color:var(--ink);margin-bottom:22px}
+.proj-split-tags{display:flex;flex-direction:column;gap:8px;margin-bottom:28px}
+.proj-split-tag{font-size:11px;font-weight:600;letter-spacing:1.2px;color:var(--subtle)}
+.proj-split-body{font-size:clamp(13px,1.3vw,16px);line-height:1.6;color:var(--muted)}
+.gallery-6{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(8px,1vw,14px);margin-top:clamp(32px,4vw,56px)}
+.gallery-6 .g-item{border-radius:10px;overflow:hidden;aspect-ratio:16/9}
+.gallery-6 .g-item img{width:100%;height:100%;object-fit:cover}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,6vw,100px);align-items:start;margin-top:clamp(32px,4vw,56px)}
+.contact-intro{font-size:clamp(14px,1.4vw,17px);line-height:1.6;color:var(--muted)}
+.contact-links{display:flex;flex-direction:column}
+.c-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:clamp(18px,2vw,26px) 0;border-bottom:1px solid var(--line);transition:opacity .2s,padding-left .2s}
+.c-row:first-child{border-top:1px solid var(--line)}
+.c-row:hover{opacity:.65;padding-left:8px}
+.c-key{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--subtle)}
+.c-val{font-size:clamp(14px,1.6vw,20px);color:var(--ink);display:flex;align-items:center;gap:10px}
+.c-arr{font-size:18px;color:var(--subtle)}
+.footer{padding:clamp(28px,4vh,48px) var(--pad);border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.footer-name{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--subtle)}
+.footer-copy{font-size:11px;color:var(--subtle)}
+@media (max-width:960px){
+.nav-links{display:none}.nav-burger{display:flex}
+.s-grid-2,.about-grid,.how-grid,.fmt-layout,.proj-detail,.proj-split,.contact-grid{grid-template-columns:1fr;gap:32px}
+.about-img{order:-1;aspect-ratio:4/5;max-height:520px}
+.how-img{aspect-ratio:16/10;max-height:420px}
+.fmt-text{grid-column:1;grid-row:auto;padding-right:0}
+.fmt-tall{grid-column:1;grid-row:auto;aspect-ratio:4/5;max-height:500px}
+.fmt-sq{grid-column:1;grid-row:auto}
+.proj-meta{position:static}
+.proj-strip{grid-template-columns:repeat(2,1fr)}
+.proj-footer{grid-template-columns:1fr;gap:20px}
+.proj-split-img{aspect-ratio:4/5;max-height:520px}
+.gallery-6{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:600px){
+.proj-hero{aspect-ratio:4/5;min-height:320px}
+.hero-bottom{flex-direction:column;align-items:flex-start}
+.hero-cta{align-items:flex-start}
+.gallery-6{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav" id="nav">
+  <a href="#top" class="nav-logo">Akinbinu Akintayo</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#works">Works</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="nav-burger" id="navBurger" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+<div class="nav-mobile" id="navMobile">
+  <a href="#about">About</a>
+  <a href="#services">Services</a>
+  <a href="#works">Works</a>
+  <a href="#contact">Contact</a>
+</div>
+
+<main id="top">
+
+  <section class="hero">
+    <img class="hero-img" src="images/49_2.png" alt="Hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-name">Akinbinu Akintayo</div>
+      <div class="hero-role">AI Visual Director / Creative Director / Visual Researcher</div>
+    </div>
+    <div class="hero-bottom">
+      <p class="hero-desc">Разрабатываю визуальные направления, keyframes и style systems для брендов, студий и pitch-команд — от research до production-ready visual language.</p>
+      <div class="hero-cta">
+        <a href="#contact">Contact →</a>
+        <a href="#contact">Brief →</a>
+        <a href="#works">Portfolio →</a>
+      </div>
+    </div>
+  </section>
+  <section class="section" id="services">
+    <div class="section-inner">
+      <div class="label">What I Do</div>
+      <div class="s-grid-2">
+        <h2 class="h-title">What I Do</h2>
+        <ul class="s-list">
+          <li class="s-list-item">Creative Direction</li>
+          <li class="s-list-item">Visual Research</li>
+          <li class="s-list-item">Concept Development</li>
+          <li class="s-list-item">Style Frames / Keyframes</li>
+          <li class="s-list-item">Style DNA</li>
+          <li class="s-list-item">AI-assisted ideation</li>
+          <li class="s-list-item">Production-oriented visual systems</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt" id="about">
+    <div class="section-inner">
+      <div class="label">About</div>
+      <h2 class="h-title">About</h2>
+      <div class="about-grid">
+        <div class="about-text">
+          <p>Я работаю на пересечении visual direction, concept development, AI-assisted ideation и CGI-based image making. Основной фокус моей работы — не отдельные красивые изображения, а визуальные системы, которые можно использовать в pitch-документах, рекламных кампаниях, motion-концептах, key visual-сериях и брендовых средах.</p>
+          <p>Работаю с fashion, beauty, luxury, product, pharma, culture, tourism и experimental форматами. Помогаю превращать продукт, тему или бренд в целостный визуальный язык, который выглядит современно, системно и пригоден для дальнейшего развития.</p>
+        </div>
+        <div class="about-img"><img src="images/47_1.png" alt="About"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="process">
+    <div class="section-inner">
+      <div class="label">How I Work</div>
+      <div class="how-grid">
+        <div class="how-img"><img src="images/23_1.png" alt="How I Work"></div>
+        <div class="how-content">
+          <h2 class="h-title" style="margin-bottom:clamp(18px,2vw,28px)">How I Work</h2>
+          <p class="how-text">Работа начинается с контекста, задачи и визуального вектора. Затем я собираю направления, создаю keyframes и формирую систему, которую можно использовать в презентации, питче, кампании или production pipeline.</p>
+          <div class="how-steps">
+            <div class="how-step"><span class="how-step-num">01</span><span class="how-step-text">Context / goal</span></div>
+            <div class="how-step"><span class="how-step-num">02</span><span class="how-step-text">Research / directions</span></div>
+            <div class="how-step"><span class="how-step-num">03</span><span class="how-step-text">Keyframes / system</span></div>
+            <div class="how-step"><span class="how-step-num">04</span><span class="how-step-text">Production-ready package</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt" id="formats">
+    <div class="section-inner">
+      <div class="label">Formats of Collaboration</div>
+      <h2 class="h-title">Formats of Collaboration</h2>
+      <div class="fmt-layout">
+        <div class="fmt-text">
+          <div class="fmt-items">
+            <div class="fmt-item">Direction Sprint</div>
+            <div class="fmt-item">Pitch Pack</div>
+            <div class="fmt-item">Style System</div>
+            <div class="fmt-item">Visual Supervision</div>
+          </div>
+          <p class="fmt-desc">Формат работы зависит от задачи: от короткого direction sprint и визуального исследования до полноценного style system и supervision для production-ready визуального языка.</p>
+        </div>
+        <div class="fmt-tall"><img src="images/4_1.png" alt="Format 1"></div>
+        <div class="fmt-sq"><img src="images/54_1.png" alt="Format 2"></div>
+        <div class="fmt-sq"><img src="images/55_1.png" alt="Format 3"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="works">
+    <div class="section-inner works-intro">
+      <div class="label" style="margin-bottom:24px">Selected Works</div>
+      <h2 class="works-intro-title">Selected Works</h2>
+      <div class="works-tags">
+        <span class="works-tag">Product direction</span>
+        <span class="works-tag">Luxury communication</span>
+        <span class="works-tag">System-led visual design</span>
+        <span class="works-tag">AI + CGI image development</span>
+        <span class="works-tag">Campaign thinking</span>
+        <span class="works-tag">Visual storytelling</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="proj-hero" id="project-01">
+    <img src="images/58_1.png" alt="Structural Light">
+    <div class="proj-hero-ov"></div>
+    <div class="proj-hero-meta">
+      <div class="proj-hero-cat">Project 01 — Eyewear Campaign</div>
+      <div class="proj-hero-name">Structural Light</div>
+      <div class="proj-hero-sub">Concept Development / Motion Treatment / Product Visual System</div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-inner">
+      <div class="label">Project 01</div>
+      <div class="proj-detail">
+        <div class="proj-meta">
+          <h3 class="proj-title">Structural Light</h3>
+          <p class="proj-body">Ключевая идея проекта — сделать сам продукт источником визуальной среды, а не просто объектом внутри кадра. Форма, материалы и конструктивная логика очков становятся основой композиции, света и motion-подачи, благодаря чему вокруг продукта собирается цельный visual world, а не отдельный packshot.</p>
+          <div class="proj-specs">
+            <div>
+              <div class="proj-spec-k">Services</div>
+              <div class="proj-spec-v">Creative Direction, Product Visual System, Motion Concept</div>
+            </div>
+            <div>
+              <div class="proj-spec-k">Project</div>
+              <div class="proj-spec-v">Concept</div>
+            </div>
+            <div>
+              <div class="proj-spec-k">Deliverables</div>
+              <div class="proj-spec-v">Keyframes, Graphic Frames, Image System</div>
+            </div>
+          </div>
+        </div>
+        <div class="proj-imgs">
+          <div class="proj-img"><img src="images/12_2.png" alt="Structural Light 1"></div>
+          <div class="proj-img"><img src="images/41_1.png" alt="Structural Light 2"></div>
+        </div>
+      </div>
+
+      <div class="proj-strip">
+        <div class="proj-strip-item"><img src="images/34_2.png" alt="Frame 1"></div>
+        <div class="proj-strip-item"><img src="images/56_1.png" alt="Frame 2"></div>
+        <div class="proj-strip-item"><img src="images/42_1.png" alt="Frame 3"></div>
+        <div class="proj-strip-item"><img src="images/57_1.png" alt="Frame 4"></div>
+      </div>
+
+      <div class="proj-footer">
+        <p class="proj-footer-text">Система может адаптироваться для eyewear, accessories, watches, jewelry и других product/fashion-категорий, где важно выстроить не только демонстрацию объекта, но и полноценный визуальный мир вокруг него.</p>
+        <div class="proj-specs">
+          <div>
+            <div class="proj-spec-k">Services</div>
+            <div class="proj-spec-v">Concept Development, Visual Direction, Product CGI</div>
+          </div>
+          <div>
+            <div class="proj-spec-k">Project</div>
+            <div class="proj-spec-v">Speculative Case</div>
+          </div>
+          <div>
+            <div class="proj-spec-k">Deliverables</div>
+            <div class="proj-spec-v">Portfolio Layouts, Keyframes, Image System</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="section section--alt" id="project-02">
+    <div class="section-inner">
+      <div class="proj-split">
+        <div class="proj-split-img"><img src="images/52_1.png" alt="BENTO Visual System"></div>
+        <div class="proj-split-c">
+          <div class="label">Project 02</div>
+          <h3 class="proj-split-title">BENTO Visual System</h3>
+          <div class="proj-split-tags">
+            <div class="proj-split-tag">Visual System / Key Visual System</div>
+            <div class="proj-split-tag">Style System Design / Creative Direction</div>
+          </div>
+          <p class="proj-split-body">Модульная key visual-система для брендов, адаптируемая под fashion, retail, beauty, pharma и digital-коммуникацию.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-inner">
+      <div class="label">Project 02 — Detail</div>
+      <div class="proj-detail">
+        <div class="proj-meta">
+          <h3 class="proj-title">BENTO System</h3>
+          <p class="proj-body">В основе проекта — модульная BENTO-система, которая позволяет собирать разные типы бренд-коммуникации внутри одного визуального алгоритма. Один принцип задает структуру и узнаваемость, а гибкость композиции помогает адаптировать систему под разные индустрии — от fashion и retail до beauty, pharma и digital.</p>
+          <div class="proj-specs">
+            <div>
+              <div class="proj-spec-k">Services</div>
+              <div class="proj-spec-v">Style System Design, Key Visual Development, Brand Structuring</div>
+            </div>
+            <div>
+              <div class="proj-spec-k">Project</div>
+              <div class="proj-spec-v">Visual System</div>
+            </div>
+            <div>
+              <div class="proj-spec-k">Deliverables</div>
+              <div class="proj-spec-v">Deck Slides, Graphic Frames, Image System</div>
+            </div>
+          </div>
+        </div>
+        <div class="proj-imgs">
+          <div class="proj-img"><img src="images/47_2.png" alt="BENTO 1"></div>
+          <div class="proj-strip" style="margin-top:0;grid-template-columns:repeat(3,1fr)">
+            <div class="proj-strip-item" style="aspect-ratio:4/3"><img src="images/58_2.png" alt="BENTO 2"></div>
+            <div class="proj-strip-item" style="aspect-ratio:4/3"><img src="images/38_1.png" alt="BENTO 3"></div>
+            <div class="proj-strip-item" style="aspect-ratio:4/3"><img src="images/39_1.png" alt="BENTO 4"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-6">
+        <div class="g-item"><img src="images/43_1.png" alt="KV 1"></div>
+        <div class="g-item"><img src="images/16_1.png" alt="KV 2"></div>
+        <div class="g-item"><img src="images/22_1.png" alt="KV 3"></div>
+        <div class="g-item"><img src="images/26_2.png" alt="KV 4"></div>
+        <div class="g-item"><img src="images/14_1.png" alt="KV 5"></div>
+        <div class="g-item"><img src="images/3_1.png" alt="KV 6"></div>
+      </div>
+
+      <div class="proj-footer">
+        <p class="proj-footer-text">Система подходит для fashion, retail, beauty, pharma и digital-коммуникации, где нужен современный и легко адаптируемый visual framework с четкой структурой и возможностью масштабирования.</p>
+        <div class="proj-specs">
+          <div>
+            <div class="proj-spec-k">Services</div>
+            <div class="proj-spec-v">Creative Direction, Brand System, Modular KV</div>
+          </div>
+          <div>
+            <div class="proj-spec-k">Project</div>
+            <div class="proj-spec-v">Research</div>
+          </div>
+          <div>
+            <div class="proj-spec-k">Deliverables</div>
+            <div class="proj-spec-v">Keyframes, Graphic Frames, Image System</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="proj-hero" id="project-03">
+    <img src="images/28_1.png" alt="Beauty Campaign">
+    <div class="proj-hero-ov"></div>
+    <div class="proj-hero-meta">
+      <div class="proj-hero-cat">Project 03 — Beauty Campaign</div>
+      <div class="proj-hero-name">Expansion — AI + CGI</div>
+      <div class="proj-hero-sub">Commercial Case / CGI Enhancement / AI Art Direction</div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-inner">
+      <div class="label">Project 03</div>
+      <div class="s-grid-2">
+        <h3 class="proj-title" style="margin-bottom:0">Creative Direction / CGI / Image Strategy</h3>
+        <div>
+          <p class="proj-body" style="margin-bottom:28px">Расширение и усиление существующей beauty-кампании с помощью AI и CGI с сохранением исходного стиля бренда и повышением визуального уровня материалов.</p>
+          <div class="proj-specs">
+            <div>
+              <div class="proj-spec-k">Services</div>
+              <div class="proj-spec-v">Creative Direction, CGI Enhancement, AI Art Direction</div>
+            </div>
+            <div>
+              <div class="proj-spec-k">Project</div>
+              <div class="proj-spec-v">Commercial Case</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt" id="contact">
+    <div class="section-inner">
+      <div class="label">Contact</div>
+      <h2 class="h-title">Let's work together</h2>
+      <div class="contact-grid">
+        <p class="contact-intro">Открыт к сотрудничеству с брендами, студиями, агентствами и командами, которым нужен visual direction, concept development или production-ready visual language.</p>
+        <div class="contact-links">
+          <a class="c-row" href="mailto:hello@example.com">
+            <span class="c-key">Email</span>
+            <span class="c-val">hello@example.com <span class="c-arr">↗</span></span>
+          </a>
+          <a class="c-row" href="https://t.me/telegram" target="_blank" rel="noopener">
+            <span class="c-key">Telegram</span>
+            <span class="c-val">@telegram <span class="c-arr">↗</span></span>
+          </a>
+          <a class="c-row" href="https://behance.net/name" target="_blank" rel="noopener">
+            <span class="c-key">Behance</span>
+            <span class="c-val">behance.net/name <span class="c-arr">↗</span></span>
+          </a>
+          <a class="c-row" href="https://instagram.com/name" target="_blank" rel="noopener">
+            <span class="c-key">Instagram</span>
+            <span class="c-val">instagram.com/name <span class="c-arr">↗</span></span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="footer-name">Akinbinu Akintayo</div>
+  <div class="footer-copy">© 2025 — All rights reserved</div>
+</footer>
+
+<script>
+(function(){
+  var burger=document.getElementById('navBurger');
+  var mobile=document.getElementById('navMobile');
+  if(burger&&mobile){
+    burger.addEventListener('click',function(){
+      burger.classList.toggle('open');
+      mobile.classList.toggle('open');
+    });
+    mobile.querySelectorAll('a').forEach(function(a){
+      a.addEventListener('click',function(){
+        burger.classList.remove('open');
+        mobile.classList.remove('open');
+      });
+    });
+  }
+  var nav=document.getElementById('nav');
+  window.addEventListener('scroll',function(){
+    if(window.scrollY>20){nav.style.boxShadow='0 1px 0 rgba(0,0,0,.04)';}
+    else{nav.style.boxShadow='none';}
+  });
+})();
+</script>
+
+</body>
+</html>
